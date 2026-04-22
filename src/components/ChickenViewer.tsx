@@ -92,7 +92,7 @@ export function ChickenViewer() {
       aria-label="Interactive 3D rubber chicken model. Click to hear it squeak."
     >
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 50 }}
+        camera={{ position: [0, 0, 3], fov: 50 }}
         shadows={{ type: THREE.PCFShadowMap }}
         gl={{ antialias: true, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
         dpr={[1, 2]}
