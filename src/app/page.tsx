@@ -20,17 +20,9 @@ export default function Home() {
         <AdSense adSlot="1234567890" adFormat="horizontal" className="mx-auto max-w-5xl" />
       </div>
 
-      <main className="flex flex-1 flex-col items-center" id="main-content">
-        <div className="flex w-full flex-1 flex-col items-center gap-4 px-4 py-4">
-          <p className="text-center text-sm text-slate-400">
-            Click the chicken to hear it squeak! Use mouse scroll or pinch to zoom.
-          </p>
-          <div className="relative w-full flex-1" style={{ minHeight: "60vh" }}>
-            <ChickenViewer />
-          </div>
-          <p className="text-xs text-slate-500" aria-live="polite">
-            Drag to rotate · Scroll to zoom · Click to squeak
-          </p>
+      <main className="flex flex-1 flex-col" id="main-content">
+        <div className="relative w-full flex-1">
+          <ChickenViewer />
         </div>
         <div className="w-full bg-slate-800/50 px-4 py-2">
           <AdSense adSlot="0987654321" adFormat="rectangle" className="mx-auto max-w-md" />
