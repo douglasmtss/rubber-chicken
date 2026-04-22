@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { InstallButton } from '@/components/InstallButton';
 
@@ -10,13 +10,45 @@ const GitHubIcon = () => (
   </svg>
 );
 
+const ShareIcon = () => (
+  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+  </svg>
+);
+
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = useCallback(async () => {
+    const shareData = {
+      title: 'Rubber Chicken 3D Viewer',
+      text: 'Aperte o frango de borracha e ouça o barulho! 🐔',
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        setOpen(false);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {
+      // user cancelled or share failed
+    }
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-10 border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-sm">
+      {/* Copy toast */}
+      {copied && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-slate-900 text-sm font-semibold px-4 py-2 rounded-full shadow-lg pointer-events-none">
+          Link copiado!
+        </div>
+      )}
       <div className="flex items-center justify-between px-4 py-3">
-        {/* Logo */}
         <div className="flex items-center gap-2">
           <span className="text-2xl" role="img" aria-hidden="true">🐔</span>
           <h1 className="text-lg font-bold text-amber-400 sm:text-xl">
@@ -26,6 +58,14 @@ export function Header() {
 
         {/* Desktop actions */}
         <div className="hidden sm:flex items-center gap-3">
+          <button
+            onClick={handleShare}
+            className="text-slate-400 transition hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 rounded"
+            aria-label={copied ? 'Link copiado!' : 'Compartilhar app'}
+            title={copied ? 'Link copiado!' : 'Compartilhar'}
+          >
+            <ShareIcon />
+          </button>
           <Link
             href="https://github.com/douglasmtss/rubber-chicken"
             target="_blank"
@@ -54,6 +94,14 @@ export function Header() {
       {/* Mobile dropdown */}
       {open && (
         <div className="sm:hidden border-t border-slate-700/50 bg-slate-900/95 px-4 py-4 flex flex-col gap-4">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 text-slate-300 transition hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 rounded"
+            aria-label={copied ? 'Link copiado!' : 'Compartilhar app'}
+          >
+            <ShareIcon />
+            <span className="text-sm font-medium">{copied ? 'Link copiado!' : 'Compartilhar'}</span>
+          </button>
           <Link
             href="https://github.com/douglasmtss/rubber-chicken"
             target="_blank"
