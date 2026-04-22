@@ -15,6 +15,12 @@ export function InstallButton() {
   );
 
   useEffect(() => {
+    // Pick up event captured before React hydrated
+    if (window.__pwaPrompt) {
+      setDeferredPrompt(window.__pwaPrompt as BeforeInstallPromptEvent);
+      window.__pwaPrompt = null;
+    }
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);

@@ -11,6 +11,7 @@ interface AdSenseProps {
 declare global {
   interface Window {
     adsbygoogle: unknown[];
+    __pwaPrompt: Event | null;
   }
 }
 
