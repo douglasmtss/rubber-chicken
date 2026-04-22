@@ -40,7 +40,7 @@ export function InstallButton() {
   return (
     <button
       onClick={handleInstall}
-      className="flex items-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+      className="flex items-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900 whitespace-nowrap"
       aria-label="Install Rubber Chicken app on your device"
     >
       <Download size={16} aria-hidden="true" />
