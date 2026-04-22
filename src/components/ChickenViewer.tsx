@@ -87,7 +87,7 @@ export function ChickenViewer() {
 
   return (
     <div
-      className="w-full h-full"
+      style={{ position: 'fixed', inset: 0 }}
       role="application"
       aria-label="Interactive 3D rubber chicken model. Click to hear it squeak."
     >
@@ -97,6 +97,7 @@ export function ChickenViewer() {
         gl={{ antialias: true, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
         dpr={[1, 2]}
         frameloop="demand"
+        style={{ width: '100%', height: '100%' }}
         onCreated={({ gl }) => {
           gl.domElement.addEventListener('webglcontextlost', (e) => {
             e.preventDefault();
