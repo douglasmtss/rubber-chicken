@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { InstallButton } from '@/components/InstallButton';
 
@@ -19,6 +19,18 @@ const ShareIcon = () => (
 export function Header() {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
 
   const handleShare = useCallback(async () => {
     const shareData = {
@@ -41,7 +53,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-10 border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-sm">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 z-10 border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-sm">
       {/* Copy toast */}
       {copied && (
         <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-slate-900 text-sm font-semibold px-4 py-2 rounded-full shadow-lg pointer-events-none">
