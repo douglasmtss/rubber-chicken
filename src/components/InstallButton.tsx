@@ -35,7 +35,7 @@ export function InstallButton() {
     }
   };
 
-  if (!deferredPrompt && process.env.NODE_ENV === 'production') return null;
+  if (!deferredPrompt) return null;
 
   return (
     <button
