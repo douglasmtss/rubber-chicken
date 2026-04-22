@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, OrbitControls, Environment, ContactShadows } from '@react-three/drei';
+import { useGLTF, OrbitControls, Environment, ContactShadows, Bounds, useBounds } from '@react-three/drei';
 import * as THREE from 'three';
 import { useChickenSound } from '@/hooks/useChickenSound';
 
@@ -42,8 +42,8 @@ function ChickenModel({ onSqueak }: { onSqueak: () => void }) {
       <primitive
         object={clonedScene}
         onClick={handleClick}
-        scale={2}
-        position={[0, -1, 0]}
+        scale={1}
+        position={[0, 0, 0]}
         style={{ cursor: 'pointer' }}
       />
     </group>
@@ -60,7 +60,7 @@ export function ChickenViewer() {
       aria-label="Interactive 3D rubber chicken model. Click to hear it squeak."
     >
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 45 }}
+        camera={{ position: [0, 0, 5], fov: 50 }}
         shadows={{ type: THREE.PCFShadowMap }}
         gl={{ antialias: true, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
         dpr={[1, 2]}
@@ -76,7 +76,9 @@ export function ChickenViewer() {
         <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
         <spotLight position={[-10, 10, -5]} intensity={0.8} color="#f59e0b" />
         <Suspense fallback={null}>
-          <ChickenModel onSqueak={playSound} />
+          <Bounds fit clip margin={1.2}>
+            <ChickenModel onSqueak={playSound} />
+          </Bounds>
           <ContactShadows
             position={[0, -2.5, 0]}
             opacity={0.4}
