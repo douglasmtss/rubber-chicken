@@ -22,7 +22,7 @@ describe('InstallButton', () => {
     rerender(<InstallButton />);
 
     // After event, button should appear
-    const btn = screen.queryByRole('button', { name: /install/i });
+    screen.queryByRole('button', { name: /install/i });
     // The button may or may not appear depending on React state update timing
     // This test verifies the component mounts without errors
     expect(true).toBe(true);
