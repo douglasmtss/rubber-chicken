@@ -14,6 +14,21 @@ function ChickenModel({ onSqueak }: { onSqueak: () => void }) {
   const animationProgress = useRef(0);
   const { invalidate } = useThree();
 
+  // Normalize model to fit within a 2-unit bounding box
+  const { normalizedScale, centeredPosition } = useMemo(() => {
+    const box = new THREE.Box3().setFromObject(clonedScene);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 2 / maxDim;
+    return {
+      normalizedScale: scale,
+      centeredPosition: [-center.x * scale, -center.y * scale, -center.z * scale] as [number, number, number],
+    };
+  }, [clonedScene]);
+
   useFrame(() => {
     if (!groupRef.current) return;
     if (isAnimating.current) {
@@ -43,8 +58,8 @@ function ChickenModel({ onSqueak }: { onSqueak: () => void }) {
       <primitive
         object={clonedScene}
         onClick={handleClick}
-        scale={1}
-        position={[0, -1, 0]}
+        scale={normalizedScale}
+        position={centeredPosition}
         style={{ cursor: 'pointer' }}
       />
     </group>
@@ -77,7 +92,7 @@ export function ChickenViewer() {
       aria-label="Interactive 3D rubber chicken model. Click to hear it squeak."
     >
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 50 }}
+        camera={{ position: [0, 0, 5], fov: 50 }}
         shadows={{ type: THREE.PCFShadowMap }}
         gl={{ antialias: true, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
         dpr={[1, 2]}
