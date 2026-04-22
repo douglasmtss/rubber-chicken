@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, OrbitControls, Environment, ContactShadows, Bounds, useBounds } from '@react-three/drei';
+import { useGLTF, OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useChickenSound } from '@/hooks/useChickenSound';
 
@@ -30,7 +30,8 @@ function ChickenModel({ onSqueak }: { onSqueak: () => void }) {
     }
   });
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
     onSqueak();
     isAnimating.current = true;
     animationProgress.current = 0;
@@ -43,10 +44,26 @@ function ChickenModel({ onSqueak }: { onSqueak: () => void }) {
         object={clonedScene}
         onClick={handleClick}
         scale={1}
-        position={[0, 0, 0]}
+        position={[0, -1, 0]}
         style={{ cursor: 'pointer' }}
       />
     </group>
+  );
+}
+
+function Controls() {
+  const { invalidate } = useThree();
+  return (
+    <OrbitControls
+      enablePan={false}
+      minDistance={2}
+      maxDistance={10}
+      onChange={() => invalidate()}
+      touches={{
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN,
+      }}
+    />
   );
 }
 
@@ -76,9 +93,7 @@ export function ChickenViewer() {
         <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
         <spotLight position={[-10, 10, -5]} intensity={0.8} color="#f59e0b" />
         <Suspense fallback={null}>
-          <Bounds fit clip margin={1.2}>
-            <ChickenModel onSqueak={playSound} />
-          </Bounds>
+          <ChickenModel onSqueak={playSound} />
           <ContactShadows
             position={[0, -2.5, 0]}
             opacity={0.4}
@@ -88,17 +103,7 @@ export function ChickenViewer() {
           />
           <Environment preset="city" />
         </Suspense>
-        <OrbitControls
-          enablePan={false}
-          minDistance={2}
-          maxDistance={10}
-          enableDamping
-          dampingFactor={0.05}
-          touches={{
-            ONE: THREE.TOUCH.ROTATE,
-            TWO: THREE.TOUCH.DOLLY_PAN,
-          }}
-        />
+        <Controls />
       </Canvas>
     </div>
   );
