@@ -50,13 +50,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         {/* Capture beforeinstallprompt before React hydrates */}
-        <script dangerouslySetInnerHTML={{ __html: `
-          window.__pwaPrompt = null;
-          window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault();
-            window.__pwaPrompt = e;
-          });
-        `}} />
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="/pwa-prompt.js" />
         {/* Plain script tag avoids Next.js injecting data-nscript, which AdSense rejects */}
         <script
           async
