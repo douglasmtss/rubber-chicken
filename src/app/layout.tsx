@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 const geistSans = Geist({
@@ -49,9 +50,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        {/* Capture beforeinstallprompt before React hydrates */}
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="/pwa-prompt.js" />
         {/* Plain script tag avoids Next.js injecting data-nscript, which AdSense rejects */}
         <script
           async
@@ -60,6 +58,8 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="flex min-h-full flex-col bg-slate-900 text-white">
+        {/* Capture beforeinstallprompt before React hydrates */}
+        <Script src="/pwa-prompt.js" strategy="beforeInteractive" />
         {children}
       </body>
     </html>
