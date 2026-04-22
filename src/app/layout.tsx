@@ -57,7 +57,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="flex min-h-full flex-col bg-slate-900 text-white">
+      <body suppressHydrationWarning className="flex min-h-full flex-col bg-slate-900 text-white">
         {children}
       </body>
     </html>
